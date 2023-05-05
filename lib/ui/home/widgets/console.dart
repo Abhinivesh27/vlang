@@ -1,17 +1,29 @@
 import 'package:flutter/material.dart';
 
-class ConsoleWidget extends StatelessWidget {
+class ConsoleWidget extends StatefulWidget {
+  final double size;
   final String data;
+
   const ConsoleWidget({
     super.key,
     required this.data,
+    required this.size,
   });
+
+  @override
+  State<ConsoleWidget> createState() => _ConsoleWidgetState();
+}
+
+class _ConsoleWidgetState extends State<ConsoleWidget> {
+  bool halfView = false;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
-      height: MediaQuery.of(context).size.height * 0.3,
+      height: halfView
+          ? MediaQuery.of(context).size.height * 0.6
+          : MediaQuery.of(context).size.height * 0.3,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         color: Colors.blue.shade100,
@@ -49,13 +61,24 @@ class ConsoleWidget extends StatelessWidget {
                         fontSize: 20,
                       ),
                     ),
-                    Text(
-                      "Output",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                    TextButton(
+                      onPressed: () {},
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          "Output",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                            fontSize: 20,
+                          ),
+                        ),
                       ),
-                    ),
+                    )
                   ],
                 ),
               ),
@@ -65,11 +88,19 @@ class ConsoleWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        setState(() {
+                          halfView = false;
+                        });
+                      },
                       icon: Icon(Icons.minimize),
                     ),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        setState(() {
+                          halfView = true;
+                        });
+                      },
                       icon: Icon(Icons.expand),
                     ),
                     IconButton(
@@ -82,7 +113,10 @@ class ConsoleWidget extends StatelessWidget {
             ],
           ),
 
-          Text(data),
+          Text(
+            widget.data == "" ? "UNHANDLED EXCEPTION OCCURED" : widget.data,
+            style: TextStyle(fontSize: widget.size),
+          ),
         ],
       ),
     );

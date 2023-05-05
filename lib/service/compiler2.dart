@@ -1,6 +1,8 @@
 import 'dart:developer';
 import 'dart:io';
 
+import '../libs/getsysinfo.dart';
+
 class Compiler {
   //Local Statement Memory Queue
   static List<String> statements = [''];
@@ -12,13 +14,16 @@ class Compiler {
   static List<String> stdOut = [];
 
   //Tokens
-  static String Display = "\nDisplay";
-  static String Variable = "Data";
+  static String Display = "\ndisplay";
+  static String Variable = "data";
   static String EOF = "!";
 
   //flags
   static bool ADD = false;
   static bool SUB = false;
+
+  //built-in feature tokens
+  static String GetSysInfo = "getSysInfo()";
 
   //main function
   static List<String> compile(String code) {
@@ -38,6 +43,12 @@ class Compiler {
           element = element.substring(0, element.length);
           List<String> localBuffer1 = element.split(" ");
 
+          //function tokanization
+          if (localBuffer1.contains(GetSysInfo)) {
+            stdOut.add(GetSystemInfo.getSysInfo());
+            log("New getsys info called");
+          }
+
           //variable tokanization
           if (localBuffer1.contains(Variable)) {
             //check for duplicate variable names
@@ -49,15 +60,52 @@ class Compiler {
 
                 //   variables.add({localBuffer1[1]: localBuffer1[3]});
                 // } else {
-                if (localBuffer1.contains(" add")) {
+                if (localBuffer1.contains("add")) {
                   log("CALLED 1");
                   ADD = true;
                   log(localBuffer1.toString());
                   variables.add(
                     {
-                      localBuffer1[1].substring(1):
-                          int.parse(localBuffer1[3].substring(1)) +
-                              int.parse(localBuffer1[5].substring(1)),
+                      localBuffer1[1]: int.parse(localBuffer1[3]) +
+                          int.parse(localBuffer1[5]),
+                    },
+                  );
+                } else if (localBuffer1.contains(GetSysInfo)) {
+                  // GetSystemInfo.getSysInfo();
+                  stdOut.add(GetSystemInfo.getSysInfo());
+                  //variables.add({"getSysInfo": GetSysInfo});
+
+                  log("Get Sysinfo line 72 called");
+                  //
+                  //
+                } else if (localBuffer1.contains("sub")) {
+                  log("CALLED sub");
+                  SUB = true;
+                  log(localBuffer1.toString());
+                  variables.add(
+                    {
+                      localBuffer1[1]: int.parse(localBuffer1[3]) -
+                          int.parse(localBuffer1[5]),
+                    },
+                  );
+                } else if (localBuffer1.contains("div")) {
+                  log("CALLED Div");
+                  SUB = true;
+                  log(localBuffer1.toString());
+                  variables.add(
+                    {
+                      localBuffer1[1]: int.parse(localBuffer1[3]) /
+                          int.parse(localBuffer1[5]),
+                    },
+                  );
+                } else if (localBuffer1.contains("mul")) {
+                  log("CALLED MUl");
+                  SUB = true;
+                  log(localBuffer1.toString());
+                  variables.add(
+                    {
+                      localBuffer1[1]: int.parse(localBuffer1[3]) *
+                          int.parse(localBuffer1[5]),
                     },
                   );
                 } else {
@@ -77,6 +125,47 @@ class Compiler {
                         int.parse(
                           localBuffer1[5],
                         ),
+                  },
+                );
+              } else if (localBuffer1.contains(GetSysInfo)) {
+                // GetSystemInfo.getSysInfo();
+                stdOut.add(GetSystemInfo.getSysInfo());
+                //variables.add({"getSysInfo": GetSysInfo});
+
+                log("Get Sysinfo line 72 called");
+                //
+                //
+              } else if (localBuffer1.contains("div")) {
+                log("CALLED Div");
+                SUB = true;
+                log(localBuffer1.toString());
+                variables.add(
+                  {
+                    localBuffer1[1]:
+                        int.parse(localBuffer1[3]) / int.parse(localBuffer1[5]),
+                  },
+                );
+              } else if (localBuffer1.contains("sub")) {
+                log("CALLED SUB 23");
+                SUB = true;
+                log(localBuffer1.toString());
+                variables.add(
+                  {
+                    localBuffer1[1]: (int.parse(localBuffer1[3]) -
+                        int.parse(
+                          localBuffer1[5],
+                        )),
+                  },
+                );
+                log("Variables" + variables.toString());
+              } else if (localBuffer1.contains("mul")) {
+                log("CALLED MUl");
+                SUB = true;
+                log(localBuffer1.toString());
+                variables.add(
+                  {
+                    localBuffer1[1]:
+                        int.parse(localBuffer1[3]) * int.parse(localBuffer1[5]),
                   },
                 );
               } else {
@@ -111,6 +200,10 @@ class Compiler {
               } else if (ADD || SUB) {
                 log("CALLED 5");
                 stdOut.add(DisplayBuffer.toString());
+              } else if (localBuffer2.contains(GetSysInfo)) {
+                //get sys info implementation
+
+                stdOut.add(GetSystemInfo.getSysInfo());
               } else {
                 log("CALLED 4");
                 stdOut.add(localBuffer2.toString());

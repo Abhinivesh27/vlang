@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:vlang/service/compiler.dart';
 import 'package:vlang/service/compiler2.dart';
@@ -12,6 +14,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  double codeFSize = 32.0;
+
   dynamic data = "Welcome to VLang Project";
   TextEditingController _controller = TextEditingController();
 
@@ -28,6 +32,34 @@ class _HomePageState extends State<HomePage> {
             },
             icon: Icon(
               Icons.run_circle,
+              size: 50,
+            ),
+          ),
+          SizedBox(
+            width: 20,
+          ),
+          IconButton(
+            onPressed: () {
+              setState(() {
+                codeFSize = codeFSize + 5;
+              });
+            },
+            icon: Icon(
+              Icons.zoom_in,
+              size: 50,
+            ),
+          ),
+          SizedBox(
+            width: 20,
+          ),
+          IconButton(
+            onPressed: () {
+              setState(() {
+                codeFSize = codeFSize - 5;
+              });
+            },
+            icon: Icon(
+              Icons.zoom_out,
               size: 50,
             ),
           ),
@@ -61,13 +93,21 @@ class _HomePageState extends State<HomePage> {
                   onChanged: (datas) {
                     setState(() {});
                   },
-                  decoration: InputDecoration(border: InputBorder.none),
+                  style: TextStyle(
+                    fontSize: codeFSize,
+                  ),
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                  ),
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
                 ),
               ),
               //console
-              ConsoleWidget(data: data.toString()),
+              ConsoleWidget(
+                data: data.toString(),
+                size: codeFSize,
+              ),
             ],
           ),
         ),

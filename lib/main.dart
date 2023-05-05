@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:vlang/libs/getsysinfo.dart';
+import 'package:vlang/ui/splash/splash.dart';
 
 import 'ui/home/home.dart';
 
@@ -9,6 +11,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: 'Vlang', home: HomePage());
+    return MaterialApp(title: 'Vlang', home: SplashScreen());
   }
 }
