@@ -16,7 +16,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   double codeFSize = 32.0;
 
-  dynamic data = "Welcome to VLang Project";
+  List<String> data = ["Welcome to VLang Project"];
   TextEditingController _controller = TextEditingController();
 
   @override
@@ -97,15 +97,18 @@ class _HomePageState extends State<HomePage> {
                     fontSize: codeFSize,
                   ),
                   decoration: InputDecoration(
-                    border: InputBorder.none,
-                  ),
+                      border: InputBorder.none,
+                      hintStyle: TextStyle(
+                        fontStyle: FontStyle.italic,
+                      ),
+                      hintText: "Write your first line of VLang..."),
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
                 ),
               ),
               //console
               ConsoleWidget(
-                data: data.toString(),
+                data: data,
                 size: codeFSize,
               ),
             ],

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ConsoleWidget extends StatefulWidget {
   final double size;
-  final String data;
+  final List<String> data;
 
   const ConsoleWidget({
     super.key,
@@ -113,9 +113,11 @@ class _ConsoleWidgetState extends State<ConsoleWidget> {
             ],
           ),
 
-          Text(
-            widget.data == "" ? "UNHANDLED EXCEPTION OCCURED" : widget.data,
-            style: TextStyle(fontSize: widget.size),
+          ...widget.data.map(
+            (e) => Text(
+              e,
+              style: TextStyle(fontSize: widget.size),
+            ),
           ),
         ],
       ),

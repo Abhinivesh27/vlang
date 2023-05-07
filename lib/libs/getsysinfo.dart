@@ -9,7 +9,7 @@ class GetSystemInfo {
   static void waitingFunction() async {
     String sysinfo = "no info";
     var command = await Process.run("uname", ["-a"]);
-    //log(command.stdout.toString() + " Standered output");
+    log(command.stdout.toString() + " Standered output");
     sysinfo = await command.stdout;
 
     mainData = sysinfo;

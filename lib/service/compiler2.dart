@@ -1,6 +1,12 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:vlang/libs/getScreenshot.dart';
+import 'package:vlang/libs/getraminfo.dart';
+import 'package:vlang/libs/launchUrl.dart';
+import 'package:vlang/libs/passNotification.dart';
+import 'package:vlang/libs/play_sound.dart';
+
 import '../libs/getsysinfo.dart';
 
 class Compiler {
@@ -23,8 +29,13 @@ class Compiler {
   static bool SUB = false;
 
   //built-in feature tokens
-  static String GetSysInfo = "getSysInfo()";
-
+  static String GetSysInfo = "getLapInfo()!";
+  static String capture = "capture()!";
+  static String tell = "tell";
+  static String view = "view";
+  static String play = "play -";
+  static String getRamInfo = "getRamInfo()";
+  //
   //main function
   static List<String> compile(String code) {
     statements = [];
@@ -44,12 +55,58 @@ class Compiler {
           List<String> localBuffer1 = element.split(" ");
 
           //function tokanization
-          if (localBuffer1.contains(GetSysInfo)) {
+          if (element.contains(GetSysInfo)) {
             stdOut.add(GetSystemInfo.getSysInfo());
             log("New getsys info called");
           }
+          if (element.contains(capture)) {
+            CaptureScreenshot.captureScreenshot();
+            stdOut.add("Screen shot captured");
+          }
+          if (element.contains(tell)) {
+            List<String> notifyArray = ["No data", "From VLang"];
 
+            notifyArray = element.split(" - ");
+
+            PassNotification.tell(
+              title: notifyArray[1],
+              details: notifyArray[2],
+            );
+
+            stdOut.add("Notification sent");
+          }
+
+          if (element.contains(view)) {
+            List<String> notifyArray = ["No data", "From VLang"];
+
+            notifyArray = element.split(" - ");
+
+            Launch.url(notifyArray[1]);
+
+            stdOut.add("${notifyArray[1]} launched");
+          }
+
+          if (element.contains(play)) {
+            //
+            List<String> notifyArray = ["No data", "From VLang"];
+
+            notifyArray = element.split(" - ");
+
+            Play.sound(notifyArray[1]);
+
+            stdOut.add("Stream started");
+          }
+          //
+          if (element.contains(getRamInfo)) {
+            //
+            List<String> notifyArray = ["No data", "From VLang"];
+
+            stdOut.add(GetRamInfo.ram());
+          }
           //variable tokanization
+          //
+          //
+          //
           if (localBuffer1.contains(Variable)) {
             //check for duplicate variable names
             // checks for empty varibales queue
@@ -70,6 +127,14 @@ class Compiler {
                           int.parse(localBuffer1[5]),
                     },
                   );
+                } else if (localBuffer1.contains(capture)) {
+                  // GetSystemInfo.getSysInfo();
+                  CaptureScreenshot.captureScreenshot();
+                  stdOut.add("Screen snhot captured");
+                  //variables.add({"getSysInfo": GetSysInfo});
+
+                  //
+                  //
                 } else if (localBuffer1.contains(GetSysInfo)) {
                   // GetSystemInfo.getSysInfo();
                   stdOut.add(GetSystemInfo.getSysInfo());
@@ -127,6 +192,15 @@ class Compiler {
                         ),
                   },
                 );
+              } else if (localBuffer1.contains(capture)) {
+                // GetSystemInfo.getSysInfo();
+                CaptureScreenshot.captureScreenshot();
+                stdOut.add("Screen snhot captured");
+                //variables.add({"getSysInfo": GetSysInfo});
+
+                log("Capture called");
+                //
+                //
               } else if (localBuffer1.contains(GetSysInfo)) {
                 // GetSystemInfo.getSysInfo();
                 stdOut.add(GetSystemInfo.getSysInfo());
@@ -200,6 +274,10 @@ class Compiler {
               } else if (ADD || SUB) {
                 log("CALLED 5");
                 stdOut.add(DisplayBuffer.toString());
+              } else if (localBuffer2.contains(capture)) {
+                //get screen capture
+
+                CaptureScreenshot.captureScreenshot();
               } else if (localBuffer2.contains(GetSysInfo)) {
                 //get sys info implementation
 
