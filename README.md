@@ -1,16 +1,71 @@
-# vlang
 
-A new Flutter project.
+# VLang
 
-## Getting Started
+A custom programming language built by Velalar College of Engineering and Technology CSE department studets
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Installation
+
+Install VLang with git
+
+```bash
+  git clone git@github.com:Abhinivesh27/vlang.git
+
+  cd /vlang/build/linux/x64/release/bundle
+
+  chmod +x vlang
+
+  ./vlang
+```
+    
+## Tech Stack
+
+**Client:** Flutter
+
+
+
+
+## Usage/Examples
+
+```
+data name = "Abhinivesh"!
+display name!
+
+tell - who are you? - CSE!
+
+view - atmega.live!
+
+capture()!
+
+getRamInfo()!
+
+```
+
+
+## Documentation
+
+
+
+`Variable decleration` - data
+
+`Print something` - display
+
+`End of a line` - !
+
+`Addition` - add
+
+`Subtraction` - sub 
+
+`Multiplication` - mul
+
+`Division` - div
+
+`System notification` - tell
+
+`View web page` - view 
+
+`Ram information` - getRamInfo()
+
+`Play Audio` - play
