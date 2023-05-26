@@ -22,7 +22,7 @@ class _ConsoleWidgetState extends State<ConsoleWidget> {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       height: halfView
-          ? MediaQuery.of(context).size.height * 0.6
+          ? MediaQuery.of(context).size.height * 2
           : MediaQuery.of(context).size.height * 0.3,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(

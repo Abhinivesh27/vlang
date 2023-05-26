@@ -2,11 +2,12 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:vlang/libs/getScreenshot.dart';
+import 'package:vlang/libs/get_temprature.dart';
 import 'package:vlang/libs/getraminfo.dart';
 import 'package:vlang/libs/launchUrl.dart';
 import 'package:vlang/libs/passNotification.dart';
 import 'package:vlang/libs/play_sound.dart';
-
+import 'package:vlang/libs/processes.dart';
 import '../libs/getsysinfo.dart';
 
 class Compiler {
@@ -29,12 +30,14 @@ class Compiler {
   static bool SUB = false;
 
   //built-in feature tokens
-  static String GetSysInfo = "getLapInfo()!";
-  static String capture = "capture()!";
+  static String GetSysInfo = "LapInfo()";
+  static String capture = "captureScreen()";
   static String tell = "tell";
   static String view = "view";
   static String play = "play -";
   static String getRamInfo = "getRamInfo()";
+  static String getTemprature = "temperature";
+  static String getProcesses = "process -";
   //
   //main function
   static List<String> compile(String code) {
@@ -54,12 +57,14 @@ class Compiler {
           element = element.substring(0, element.length);
           List<String> localBuffer1 = element.split(" ");
 
+          log("ELEMENT " + element.toString());
           //function tokanization
           if (element.contains(GetSysInfo)) {
             stdOut.add(GetSystemInfo.getSysInfo());
             log("New getsys info called");
           }
           if (element.contains(capture)) {
+            log("CAPTURE CALLED");
             CaptureScreenshot.captureScreenshot();
             stdOut.add("Screen shot captured");
           }
@@ -103,6 +108,53 @@ class Compiler {
 
             stdOut.add(GetRamInfo.ram());
           }
+
+          //processes
+          if (element.contains(getProcesses)) {
+            log("Called GET PROCESSESS");
+            List<String> tempArray = ["No data"];
+            tempArray = element.split(" - ");
+            //processor
+            if (tempArray[1] == "active") {
+              String buffer3 = Processess.active();
+
+              stdOut.add(buffer3);
+              buffer3 = "";
+            }
+            if (tempArray[1] == "all") {
+              String buffer3 = Processess.all();
+
+              stdOut.add(buffer3);
+              buffer3 = "";
+            }
+          }
+          //
+
+          //sensors
+          if (element.contains(getTemprature)) {
+            List<String> tempArray = ["No data"];
+            tempArray = element.split(" - ");
+            //processor
+            if (tempArray.contains("processor")) {
+              String buffer3 = GetTemprature.processor();
+
+              stdOut.add(buffer3);
+              buffer3 = "";
+            } else if (tempArray.contains("all")) {
+              String buffer3 = GetTemprature.allSensors();
+
+              stdOut.add(buffer3);
+              buffer3 = "";
+            } else if (tempArray.contains("wifi")) {
+              String buffer3 = GetTemprature.wifi();
+
+              stdOut.add(buffer3);
+              buffer3 = "";
+            }
+          }
+          //
+          //
+          //
           //variable tokanization
           //
           //
