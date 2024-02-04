@@ -1,0 +1,12 @@
+Sey - Do
+Kaattu - print
+niruttu - stop
+
+arithmatic ops
+
+kootu - add
+kazhi - subract
+peruku - Multiply
+vagu - divide
+
+

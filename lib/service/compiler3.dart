@@ -32,8 +32,8 @@ class Compiler3 {
       //
       //local memory
       List<String> localSemiTokens = [];
-      List<Map<String, dynamic>> localTokens = [];
-      List<Map<String, dynamic>> localVariables = [];
+      // List<Map<String, dynamic>> localTokens = [];
+      // List<Map<String, dynamic>> localVariables = [];
       //
       //
       //

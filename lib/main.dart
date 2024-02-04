@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:vlang/libs/getsysinfo.dart';
 import 'package:vlang/ui/splash/splash.dart';
 
-import 'ui/home/home.dart';
 
 void main() => runApp(const MyApp());
 

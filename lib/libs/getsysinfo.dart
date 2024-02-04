@@ -1,7 +1,5 @@
-import 'dart:developer';
 import 'dart:io';
 
-import 'package:vlang/main.dart';
 
 class GetSystemInfo {
   static String getSysInfo() {

@@ -1,8 +1,6 @@
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:vlang/service/compiler.dart';
-import 'package:vlang/service/compiler2.dart';
+import 'package:vlang/service/compiler4.dart';
 
 import 'widgets/console.dart';
 
@@ -27,7 +25,8 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             onPressed: () {
               setState(() {
-                data = Compiler.compile(_controller.text);
+                //data = 
+                Compiler.compile(_controller.text);
               });
             },
             icon: Icon(

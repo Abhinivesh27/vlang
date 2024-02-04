@@ -1,4 +1,3 @@
-import 'dart:collection';
 
 class VlangCompiler {
   static List<Map<String, dynamic>> _variables = [];

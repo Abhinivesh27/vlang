@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:vlang/libs/getScreenshot.dart';
 import 'package:vlang/libs/get_temprature.dart';
@@ -52,6 +51,7 @@ class Compiler {
     //statement itration
     statements.forEach(
       (element) {
+        log("Statement is ${element}");
         //eleminating delimeter EOF
         if (element.isNotEmpty) {
           element = element.substring(0, element.length);
@@ -86,7 +86,11 @@ class Compiler {
 
             notifyArray = element.split(" - ");
 
-            Launch.url(notifyArray[1]);
+            try {
+              Launch.url(notifyArray[1]);
+            } catch (e) {
+              log(e.toString());
+            }
 
             stdOut.add("${notifyArray[1]} launched");
           }
@@ -104,7 +108,6 @@ class Compiler {
           //
           if (element.contains(getRamInfo)) {
             //
-            List<String> notifyArray = ["No data", "From VLang"];
 
             stdOut.add(GetRamInfo.ram());
           }

@@ -1,13 +1,12 @@
 import 'dart:developer';
-import 'dart:io';
+//import 'dart:io';
 
-import 'package:vlang/main.dart';
 
 class PassNotification {
   static void waitingFunction(
       bool needIcon, String title, String details) async {
-    String sysinfo = "no info";
-    var command = await Process.run("notify-send", [title, details]);
+    //String sysinfo = "no info";
+    //var command = await Process.run("notify-send", [title, details]);
     //log(command.stdout.toString() + " Standered output");
   }
 
