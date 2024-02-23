@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:vlang/ui/choice/choice.dart';
 import 'package:vlang/ui/home/home.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -20,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
       () => Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => HomePage(),
+          builder: (context) => ChoiceWidget(),
         ),
       ),
     );
@@ -43,7 +44,7 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
           ),
           Text(
-            "V 0.2",
+            "V 0.3",
             style: TextStyle(
               fontSize: 30,
               color: Colors.green,

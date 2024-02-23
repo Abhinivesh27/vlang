@@ -20,7 +20,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       appBar: AppBar(
+        backgroundColor: Colors.grey.shade900,
+        foregroundColor: Colors.white,
         actions: [
           IconButton(
             onPressed: () {
@@ -69,7 +72,7 @@ class _HomePageState extends State<HomePage> {
         elevation: 0,
         title: Text("Vlang compiler"),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey.shade900,
       body: Container(
         padding: const EdgeInsets.all(20),
         height: MediaQuery.of(context).size.height,
@@ -84,7 +87,7 @@ class _HomePageState extends State<HomePage> {
                 height: MediaQuery.of(context).size.height * 0.7,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
-                  color: Colors.pink.shade100,
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: TextField(

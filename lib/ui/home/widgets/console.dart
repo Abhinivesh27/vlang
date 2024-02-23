@@ -26,7 +26,7 @@ class _ConsoleWidgetState extends State<ConsoleWidget> {
           : MediaQuery.of(context).size.height * 0.3,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-        color: Colors.blue.shade100,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(

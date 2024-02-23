@@ -5,12 +5,16 @@ class Compiler {
   List<String> statements = [];
 
   static void compile(String code) {
+    //module1 --> LEXICAL ANALYSIS
     tokenize(code).forEach((element) {
       log("${element.value} --> ${element.type}");
     });
+
+    //module2 --> SYNTAX ANALYSIS
+    syntaxAnalyzer(code);
   }
 
-  //tokenizer
+  //tokenizer - LEXICAL ANALYSIS
   static List<Token> tokenize(String statement) {
     List<Token> tokens = [];
     final keywordPattern =
@@ -127,4 +131,43 @@ int calculateSumAfterVagu(String text) {
   }
   print(sum);
   return sum.toInt();
+}
+
+//SYNTAX ANALYSIS
+void syntaxAnalyzer(String text) {
+  List<String> keywords = [
+    "sey",
+    "kaattu",
+    "niruttu",
+    "kootu ",
+    "kazhi ",
+    "peruku ",
+    "vagu ",
+  ];
+  final keywordPattern =
+      RegExp(r"^(sey|kaattu|niruttu|kootu|kazhi|peruku|vagu|\d+|,|\s+)$");
+
+  final lines = text.split('\n');
+
+  for (final line in lines) {
+    final cleanLine = line.replaceAll(keywordPattern, "");
+    final unknownWords = cleanLine.split(" ");
+    for (final word in unknownWords) {
+      if (word.isNotEmpty) {
+        word.replaceAll(",", "");
+        word.replaceAll(" ", "");
+        keywords.forEach((element) {
+          word.replaceAll(element, "");
+        },);
+
+      }
+    }
+
+    if(text.split("\n").toList().first != keywords[0]) {
+      log("PROGRAM NOT STARTED PROPERLY");
+    }
+    if(text.split("\n").toList()[text.split("\n").toList().length - 1] != keywords[2]) {
+      log("PROGRAM NOT ENDED PROPERLY ");
+    }
+  }
 }
