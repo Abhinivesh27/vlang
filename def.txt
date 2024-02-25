@@ -9,4 +9,5 @@ kazhi - subract
 peruku - Multiply
 vagu - divide
 
+maatri varName = "value";
 

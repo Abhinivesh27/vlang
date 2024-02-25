@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:vlang/service/controller.dart';
+import 'package:vlang/ui/home/service.dart';
 
 class ConsoleWidget extends StatefulWidget {
   final double size;
@@ -15,6 +18,7 @@ class ConsoleWidget extends StatefulWidget {
 }
 
 class _ConsoleWidgetState extends State<ConsoleWidget> {
+  List<String> visibleText = ["Welcome to VLang"];
   bool halfView = false;
 
   @override
@@ -40,45 +44,123 @@ class _ConsoleWidgetState extends State<ConsoleWidget> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Text(
-                      "Terminal",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                    Text(
-                      "Debug",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                    Text(
-                      "Problems",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
                     TextButton(
-                      onPressed: () {},
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: Colors.grey,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Text(
-                          "Output",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                    )
+                      onPressed: () {
+                        Provider.of<HomeScreenController>(context,
+                                listen: false)
+                            .setCurrentTab(0);
+                      },
+                      child: Provider.of<HomeScreenController>(context,
+                                      listen: true)
+                                  .currentTab ==
+                              0
+                          ? Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Text(
+                                "Terminal",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                ),
+                              ),
+                            )
+                          : Text(
+                              "Terminal",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey.shade400,
+                                fontSize: 20,
+                              ),
+                            ),
+                    ),
+                    //bugs
+                    TextButton(
+                      onPressed: () {
+                        Provider.of<HomeScreenController>(context,
+                                listen: false)
+                            .setCurrentTab(1);
+
+                        setState(() {
+                          visibleText = [];
+                          visibleText = Provider.of<CompilerController>(context,
+                                  listen: false)
+                              .stdErr;
+                        });
+                      },
+                      child: Provider.of<HomeScreenController>(context,
+                                      listen: true)
+                                  .currentTab ==
+                              1
+                          ? Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Text(
+                                "Bugs",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                ),
+                              ),
+                            )
+                          : Text(
+                              "Bugs",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey.shade400,
+                                fontSize: 20,
+                              ),
+                            ),
+                    ),
+                    //output
+                    TextButton(
+                      onPressed: () {
+                        Provider.of<HomeScreenController>(context,
+                                listen: false)
+                            .setCurrentTab(2);
+                              setState(() {
+                          visibleText = [];
+                          visibleText = Provider.of<CompilerController>(context,
+                                  listen: false)
+                              .stdOut;
+                        });
+                      },
+                      child: Provider.of<HomeScreenController>(context,
+                                      listen: true)
+                                  .currentTab ==
+                              2
+                          ? Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Text(
+                                "Output",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                ),
+                              ),
+                            )
+                          : Text(
+                              "Output",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey.shade400,
+                                fontSize: 20,
+                              ),
+                            ),
+                    ),
                   ],
                 ),
               ),
@@ -113,10 +195,21 @@ class _ConsoleWidgetState extends State<ConsoleWidget> {
             ],
           ),
 
-          ...widget.data.map(
-            (e) => Text(
-              e,
-              style: TextStyle(fontSize: widget.size),
+          Container(
+            height: MediaQuery.of(context).size.width,
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.only(left: 50, right: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ...visibleText.map(
+                  (e) => Text(
+                    e,
+                    textAlign: TextAlign.start,
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

@@ -1,6 +1,9 @@
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:vlang/service/compiler4.dart';
+import 'package:vlang/service/controller.dart';
+import 'package:vlang/ui/home/service.dart';
 
 import 'widgets/console.dart';
 
@@ -12,24 +15,32 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+
   double codeFSize = 32.0;
 
-  List<String> data = ["Welcome to VLang Project"];
-  TextEditingController _controller = TextEditingController();
+  void setErrorToProvider(String erorr) {
+    Provider.of<CompilerController>(context, listen: false).setError(erorr);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       appBar: AppBar(
         backgroundColor: Colors.grey.shade900,
         foregroundColor: Colors.white,
         actions: [
           IconButton(
             onPressed: () {
+              Provider.of<HomeScreenController>(context,listen: false).setCurrentTab(2);
+              Provider.of<CompilerController>(context, listen: false)
+                  .clearStdErr();
+              Provider.of<CompilerController>(context, listen: false)
+                  .clearStdOut();
+              Provider.of<CompilerController>(context, listen: false).clearVars();
               setState(() {
-                //data = 
-                Compiler.compile(_controller.text);
+                
+                Compiler.compile(Provider.of<CompilerController>(context,listen: false).code.text, context);
               });
             },
             icon: Icon(
@@ -65,8 +76,18 @@ class _HomePageState extends State<HomePage> {
               size: 50,
             ),
           ),
+
+          IconButton(
+            onPressed: () {
+              Provider.of<CompilerController>(context,listen: false).saveFile();
+            },
+            icon: Icon(
+              Icons.save_as_rounded,
+              size: 50,
+            ),
+          ),
           SizedBox(
-            width: 200,
+            width: 150,
           )
         ],
         elevation: 0,
@@ -91,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: TextField(
-                  controller: _controller,
+                  controller: Provider.of<CompilerController>(context,listen: true).code,
                   onChanged: (datas) {
                     setState(() {});
                   },
@@ -110,7 +131,8 @@ class _HomePageState extends State<HomePage> {
               ),
               //console
               ConsoleWidget(
-                data: data,
+                data: Provider.of<CompilerController>(context, listen: true)
+                    .stdOut,
                 size: codeFSize,
               ),
             ],

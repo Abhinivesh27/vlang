@@ -1,26 +1,46 @@
 import 'dart:developer';
+import 'package:vlang/service/compiler/libs/kaattu.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:vlang/service/compiler/libs/whitespace.dart';
+import 'package:vlang/service/controller.dart';
 
 class Compiler {
   List<Map<String, dynamic>> variables = [];
   List<String> statements = [];
 
-  static void compile(String code) {
+  static void compile(String code, BuildContext context) {
     //module1 --> LEXICAL ANALYSIS
-    tokenize(code).forEach((element) {
+    tokenize(code, context).forEach((element) {
       log("${element.value} --> ${element.type}");
     });
 
     //module2 --> SYNTAX ANALYSIS
-    syntaxAnalyzer(code);
+    !syntaxAnalyzer(code, context) ? execution_unit(code, context) : () {};
   }
 
   //tokenizer - LEXICAL ANALYSIS
-  static List<Token> tokenize(String statement) {
+  static List<Token> tokenize(String statement, BuildContext context) {
     List<Token> tokens = [];
     final keywordPattern =
         RegExp(r"^(sey|kaattu|niruttu|kootu|kazhi|peruku|vagu)");
     final numberPattern = RegExp(r"[-+]?\d+(\.\d*)?");
+  //set variable
+    statement.split("\n").forEach(
+      (element) {
+        if (element.contains("maatri")) {
+          int varIndex = element.indexOf("maatri");
+          List<String> rawInput = element.split("=");
+          print("EDITED -> " + rawInput[0].replaceRange(0, 6, ""));
 
+          Provider.of<CompilerController>(context, listen: false).setVariable(
+              rawInput[0].replaceRange(0, 6, ""),
+              rawInput[1].replaceAll("\"", "").replaceAll("!", ""));
+
+          print(rawInput);
+        } else {}
+      },
+    );
     for (final line in statement.split('\n')) {
       final match = keywordPattern.firstMatch(line);
       if (match != null) {
@@ -31,16 +51,16 @@ class Compiler {
         } else if (match.group(0)! == "niruttu") {
           tokens.add(Token(type: "END OF PROGRAM", value: "niruttu"));
         } else if (match.group(0)! == "kootu") {
-          calculateSumAfterKootu(statement);
+          calculateSumAfterKootu(line, context);
           tokens.add(Token(type: "ADDITION", value: "kootu"));
         } else if (match.group(0)! == "kazhi") {
-          calculateSumAfterKazhi(statement);
+          calculateSumAfterKazhi(line, context);
           tokens.add(Token(type: "SUBTRACTION", value: "kazhi"));
         } else if (match.group(0)! == "peruku") {
-          calculateSumAfterPeruku(statement);
+          calculateSumAfterPeruku(line, context);
           tokens.add(Token(type: "MULTIPLICATION", value: "peruku"));
         } else if (match.group(0)! == "vagu") {
-          calculateSumAfterVagu(statement);
+          calculateSumAfterVagu(line, context);
           tokens.add(Token(type: "DIVISION", value: "vagu"));
         }
 
@@ -50,6 +70,9 @@ class Compiler {
     for (final match in numberPattern.allMatches(statement)) {
       tokens.add(Token(type: "Number", value: match.group(0)!));
     }
+
+    
+
     return tokens;
   }
 }
@@ -61,80 +84,35 @@ class Token {
   Token({required this.type, required this.value});
 }
 
-int calculateSumAfterKootu(String text) {
+void calculateSumAfterKootu(String text, BuildContext context) {
   final kootuPattern = RegExp(r"kootu\s+(\d+)(?:,\s*(\d+))?");
-  final numberPattern = RegExp(r"\d+");
-
-  int sum = 0;
-
-  for (final match in kootuPattern.allMatches(text)) {
-    int num1 = int.parse(match.group(1)!);
-    int num2 = 0; // Optional second number
-    if (match.group(2) != null) {
-      num2 = int.parse(match.group(2)!);
-    }
-    sum += num1 + num2;
-  }
-  print(sum);
-  return sum;
+  List<String> statement = text.replaceAll("!", "").split("\n");
+  List<String> line = text.replaceAll("kootu", "").replaceAll("!", "").split(",");
+  
+  Provider.of<CompilerController>(context,listen: false).addVars(line[0].replaceAll("\$", ""), line[1].replaceAll("\$", ""));
+  
 }
 
-int calculateSumAfterKazhi(String text) {
+void calculateSumAfterKazhi(String text, BuildContext context) {
   final kootuPattern = RegExp(r"kazhi\s+(\d+)(?:,\s*(\d+))?");
-  final numberPattern = RegExp(r"\d+");
-
-  int sum = 0;
-
-  for (final match in kootuPattern.allMatches(text)) {
-    int num1 = int.parse(match.group(1)!);
-    int num2 = 0; // Optional second number
-    if (match.group(2) != null) {
-      num2 = int.parse(match.group(2)!);
-    }
-    sum += num1 - num2;
-  }
-  print(sum);
-  return sum;
+  List<String> line = text.replaceAll("kazhi", "").replaceAll("!", "").split(",");
+  Provider.of<CompilerController>(context,listen: false).subVars(line[0].replaceAll("\$", ""), line[1].replaceAll("\$", ""));
 }
 
-int calculateSumAfterPeruku(String text) {
+void calculateSumAfterPeruku(String text, BuildContext context) {
   final kootuPattern = RegExp(r"peruku\s+(\d+)(?:,\s*(\d+))?");
-  final numberPattern = RegExp(r"\d+");
-
-  int sum = 0;
-
-  for (final match in kootuPattern.allMatches(text)) {
-    int num1 = int.parse(match.group(1)!);
-    int num2 = 0; // Optional second number
-    if (match.group(2) != null) {
-      num2 = int.parse(match.group(2)!);
-    }
-    sum += num1 * num2;
-  }
-  print(sum);
-  return sum;
+  List<String> line = text.replaceAll("peruku", "").replaceAll("!", "").split(",");
+  Provider.of<CompilerController>(context,listen: false).multiVars(line[0].replaceAll("\$", ""), line[1].replaceAll("\$", ""));
 }
 
-int calculateSumAfterVagu(String text) {
+void calculateSumAfterVagu(String text, BuildContext context) {
   final kootuPattern = RegExp(r"vagu\s+(\d+)(?:,\s*(\d+))?");
-  final numberPattern = RegExp(r"\d+");
-
-  double sum = 0;
-
-  for (final match in kootuPattern.allMatches(text)) {
-    int num1 = int.parse(match.group(1)!);
-    int num2 = 0; // Optional second number
-    if (match.group(2) != null) {
-      num2 = int.parse(match.group(2)!);
-    }
-    sum += num1 / num2;
-  }
-  print(sum);
-  return sum.toInt();
+ List<String> line = text.replaceAll("vagu", "").replaceAll("!", "").split(",");
+  Provider.of<CompilerController>(context,listen: false).divVars(line[0].replaceAll("\$", ""), line[1].replaceAll("\$", ""));
 }
 
 //SYNTAX ANALYSIS
-void syntaxAnalyzer(String text) {
+bool syntaxAnalyzer(String text, BuildContext context) {
   List<String> keywords = [
     "sey",
     "kaattu",
@@ -148,26 +126,49 @@ void syntaxAnalyzer(String text) {
       RegExp(r"^(sey|kaattu|niruttu|kootu|kazhi|peruku|vagu|\d+|,|\s+)$");
 
   final lines = text.split('\n');
-
+  bool errors = false;
   for (final line in lines) {
     final cleanLine = line.replaceAll(keywordPattern, "");
     final unknownWords = cleanLine.split(" ");
+    if (line.contains("sey") || line.contains("niruttu")) {
+    } else {
+      if (!line.endsWith("!")) {
+        errors = true;
+        Provider.of<CompilerController>(context, listen: false)
+            .setError("! missing at end of a line");
+      }
+    }
     for (final word in unknownWords) {
       if (word.isNotEmpty) {
         word.replaceAll(",", "");
         word.replaceAll(" ", "");
-        keywords.forEach((element) {
-          word.replaceAll(element, "");
-        },);
-
+        keywords.forEach(
+          (element) {
+            word.replaceAll(element, "");
+          },
+        );
       }
     }
 
-    if(text.split("\n").toList().first != keywords[0]) {
+    if (text.split("\n").toList().first != keywords[0]) {
+      Provider.of<CompilerController>(context, listen: false)
+          .setError("PROGRAM NOT STARTED PROPERLY");
       log("PROGRAM NOT STARTED PROPERLY");
+      errors = true;
     }
-    if(text.split("\n").toList()[text.split("\n").toList().length - 1] != keywords[2]) {
+    if (text.split("\n").toList()[text.split("\n").toList().length - 1] !=
+        keywords[2]) {
+      Provider.of<CompilerController>(context, listen: false)
+          .setError("PROGRAM NOT ENDED PROPERLY");
       log("PROGRAM NOT ENDED PROPERLY ");
+      errors = true;
     }
+  }
+  return errors;
+}
+
+void execution_unit(String code, BuildContext context) {
+  if (code.contains("kaattu")) {
+    kaattu(code, context);
   }
 }

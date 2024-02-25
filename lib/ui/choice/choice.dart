@@ -1,4 +1,9 @@
+import 'dart:developer';
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:vlang/service/controller.dart';
 import 'package:vlang/ui/home/home.dart';
 
 class ChoiceWidget extends StatefulWidget {
@@ -9,6 +14,27 @@ class ChoiceWidget extends StatefulWidget {
 }
 
 class _ChoiceWidgetState extends State<ChoiceWidget> {
+  PlatformFile file = PlatformFile(name: '', size: 0);
+
+  void pickFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(allowedExtensions: ['vlang'],type: FileType.custom);
+
+    if (result != null) {
+      file = result.files.first;
+      if (file.bytes != null) {
+        Provider.of<CompilerController>(context, listen: false)
+            .setCode(String.fromCharCodes(file.bytes!.toList()));
+      }
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => HomePage(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +51,9 @@ class _ChoiceWidgetState extends State<ChoiceWidget> {
           children: [
             SizedBox(width: 1),
             ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                pickFile();
+              },
               icon: Icon(
                 Icons.upload_file,
                 size: 100,
