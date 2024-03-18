@@ -1,6 +1,8 @@
 import 'dart:collection';
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io' as io;
+import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:vlang/service/compiler/libs/whitespace.dart';
@@ -233,4 +235,23 @@ class CompilerController extends ChangeNotifier {
     _stdOut.add(sum.toString());
     notifyListeners();
   }
+
+  void androidManager(List<String> commands) async {
+    print(commands);
+      //commands.forEach((element) { print(element); });
+      final process = await Process.start('/Users/abhinivesh/Library/Android/sdk/platform-tools/adb', commands.where((element) => element.isNotEmpty).toList());
+
+  
+  await process.stdout
+      .transform(utf8.decoder)
+      .forEach((e) => _stdOut.add(e));
+      notifyListeners();
+print(_stdOut);
+
+  }
+
+  void showPackages() async {
+    
+  }
+
 }

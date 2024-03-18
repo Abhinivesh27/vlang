@@ -62,7 +62,7 @@ class Compiler {
         } else if (match.group(0)! == "vagu") {
           calculateSumAfterVagu(line, context);
           tokens.add(Token(type: "DIVISION", value: "vagu"));
-        }
+        } 
 
         //print(match.group(0)!);
       }
@@ -171,4 +171,10 @@ void execution_unit(String code, BuildContext context) {
   if (code.contains("kaattu")) {
     kaattu(code, context);
   }
+
+  else if (code.contains("android")) {
+          Provider.of<CompilerController>(context,listen: false).androidManager(
+            code.split('\n').toList().where((element) => element.contains("android")).toList()[0].replaceAll("!", "").replaceAll("android", "").split(" ")
+          );
+        }
 }
