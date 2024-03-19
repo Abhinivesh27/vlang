@@ -24,10 +24,10 @@ class _ConsoleWidgetState extends State<ConsoleWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 20),
+      //margin: const EdgeInsets.only(bottom: 20),
       height: halfView
           ? MediaQuery.of(context).size.height * 10
-          : MediaQuery.of(context).size.height * 0.3,
+          : MediaQuery.of(context).size.height * 2,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -39,7 +39,6 @@ class _ConsoleWidgetState extends State<ConsoleWidget> {
           Stack(
             children: [
               Container(
-                height: 100,
                 width: MediaQuery.of(context).size.width,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -195,21 +194,23 @@ class _ConsoleWidgetState extends State<ConsoleWidget> {
             ],
           ),
 
-          Container(
-            height: MediaQuery.of(context).size.width,
-            alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.only(left: 50, right: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ...visibleText.map(
-                  (e) => Text(
-                    e,
-                    textAlign: TextAlign.start,
-                    style: TextStyle(fontSize: 20),
+          Expanded(
+            child: Container(
+              height: MediaQuery.of(context).size.width,
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.only(left: 50, right: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ...visibleText.map(
+                    (e) => Text(
+                      e,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(fontSize: 20),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],

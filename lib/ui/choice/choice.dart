@@ -17,14 +17,19 @@ class _ChoiceWidgetState extends State<ChoiceWidget> {
   PlatformFile file = PlatformFile(name: '', size: 0);
 
   void pickFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(allowedExtensions: ['vlang'],type: FileType.custom);
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
 
     if (result != null) {
       file = result.files.first;
       if (file.bytes != null) {
         Provider.of<CompilerController>(context, listen: false)
             .setCode(String.fromCharCodes(file.bytes!.toList()));
-      }
+      } 
+      else {
+      log("Error 1");
+    }
+    } else {
+      log("Error");
     }
 
     Navigator.push(

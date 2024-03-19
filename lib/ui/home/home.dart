@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
       ),
       backgroundColor: Colors.grey.shade900,
       body: Container(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         child: SingleChildScrollView(

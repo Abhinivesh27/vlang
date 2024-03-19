@@ -56,6 +56,8 @@ class CompilerController extends ChangeNotifier {
   }
 
   void setCode(String code) {
+    log(code);
+    log("CALLED");
     _code.text = code;
     notifyListeners();
   }
@@ -239,7 +241,7 @@ class CompilerController extends ChangeNotifier {
   void androidManager(List<String> commands) async {
     print(commands);
       //commands.forEach((element) { print(element); });
-      final process = await Process.start('/Users/abhinivesh/Library/Android/sdk/platform-tools/adb', commands.where((element) => element.isNotEmpty).toList());
+      final process = await Process.start('/Users/abhinivesh/Library/Android/sdk/platform-tools/adb', commands.where((element) => element.isNotEmpty).toList(), runInShell: true);
 
   
   await process.stdout
